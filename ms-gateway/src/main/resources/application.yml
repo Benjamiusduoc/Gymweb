@@ -3,14 +3,7 @@ server:
 
 spring:
   application:
-    name: ms-gateway
-
-gateway:
-  services:
-    usuarios: http://localhost:8081
-    asistencia: http://localhost:8082
-    suscripciones: http://localhost:8083
-    pagos: http://localhost:8084
+    name: gymweb-gateway
 
 management:
   endpoints:
