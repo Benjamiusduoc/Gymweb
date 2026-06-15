@@ -1,6 +1,6 @@
 # GymWeb 🏋️
 
-Sistema de gestión para gimnasio basado en microservicios con Spring Boot. Permite registrar usuarios, controlar asistencia, administrar suscripciones y gestionar pagos.
+Sistema de gestión para gimnasio construido con Spring Boot. Incluye autenticación con roles, registro de usuarios, planes de suscripción, pagos simulados y control de asistencia. Diseño moderno con tema oscuro glassmorphism.
 
 ## Integrantes
 
@@ -8,139 +8,140 @@ Sistema de gestión para gimnasio basado en microservicios con Spring Boot. Perm
 - **Benjamin Salgado**
 - **Alonso Gavilan**
 
-## Microservicios
+## Funcionalidades
 
-| # | Microservicio | Puerto | Descripción |
-|---|--------------|--------|-------------|
-| 1 | `ms-gateway` | 8080 | API Gateway + Frontend web |
-| 2 | `ms-usuarios` | 8081 | CRUD de usuarios del gimnasio |
-| 3 | `ms-asistencia` | 8082 | Registro de entrada y salida |
-| 4 | `ms-suscripciones` | 8083 | Planes y suscripciones |
-| 5 | `ms-pagos` | 8084 | Registro de pagos |
+- **Login y Registro** con roles (Dueño/Admin y Miembro)
+- **Panel de Administración**: gestión de usuarios, planes, suscripciones y asistencia
+- **Portal de Miembro**: perfil, suscripción activa, selección de planes y pago simulado
+- **Pago Simulado**: al pagar se crea automáticamente la suscripción en la base de datos
+- **Control de Asistencia**: registro de entrada y salida
+- **Diseño Responsivo**: tema oscuro con glassmorphism, Inter font, acentos naranjas
+
+## Arquitectura
+
+El proyecto funciona como **monolith** desplegado en un solo servicio:
+
+| Componente | Puerto | Descripción |
+|-----------|--------|-------------|
+| `ms-gateway` | 8080 | Frontend + API completa (usuarios, suscripciones, pagos, asistencia) |
+
+### Bases de datos (H2 en memoria)
+
+| Tabla | Descripción |
+|-------|-------------|
+| `usuarios` | Usuarios con roles DUENO/MIEMBRO/ADMIN |
+| `planes` | Planes de suscripción (Básico, Premium, Elite) |
+| `suscripciones_usuario` | Suscripciones activas de cada usuario |
+| `pagos` | Registro de pagos realizados |
+| `asistencias` | Control de entrada/salida |
 
 ## Requisitos
 
 - **Java 21** (JDK)
 - **Maven** (o usar `mvnw.cmd` incluido)
-- **MySQL 8+** (solo para perfil dev/prod)
 - Navegador web moderno
 
-## Cómo ejecutar localmente (perfil default con H2)
-
-No necesitas MySQL. Cada microservicio usa H2 en memoria por defecto.
-
-### Opción 1: Una terminal por servicio (recomendado para desarrollo)
-
-Abre 5 terminales y ejecuta en cada una:
+## Cómo ejecutar localmente
 
 ```bash
-cd ms-usuarios && .\mvnw.cmd spring-boot:run
-cd ms-asistencia && .\mvnw.cmd spring-boot:run
-cd ms-suscripciones && .\mvnw.cmd spring-boot:run
-cd ms-pagos && .\mvnw.cmd spring-boot:run
-cd ms-gateway && .\mvnw.cmd spring-boot:run
+cd ms-gateway
+.\mvnw.cmd spring-boot:run
 ```
 
-### Opción 2: Docker Compose
+La aplicación iniciará en http://localhost:8080
 
-```bash
-docker compose up --build
-```
+### Credenciales de prueba
 
+| Usuario | Email | Contraseña | Rol |
+|---------|-------|------------|-----|
+| Admin GymWeb | admin@gymweb.cl | admin123 | DUENO |
+| Maria Lopez | maria@correo.cl | demo1234 | MIEMBRO |
 
 ## Deploy en Railway
 
-El proyecto está desplegado en Railway (plan Free, límite 3 servicios):
+El proyecto está desplegado en Railway como un servicio único:
 
-| Servicio | URL |
-|----------|-----|
-| **Gateway** (frontend + API usuarios) | https://gateway-production-6556.up.railway.app |
-| Usuarios API (incluido en gateway) | https://gateway-production-6556.up.railway.app/api/usuarios |
-
-> Para agregar más servicios (asistencia, suscripciones, pagos, MySQL) se necesita **upgrade a Hobby ($5/mes)**.
-
-### Opción 3: Script PowerShell
-
-```powershell
-$base = "C:\ruta\a\GymWeb"
-$services = @('ms-usuarios','ms-asistencia','ms-suscripciones','ms-pagos','ms-gateway')
-foreach ($s in $services) {
-    Start-Process powershell -WindowStyle Normal -ArgumentList "-NoExit", "-Command", "cd '$base\$s'; .\mvnw.cmd spring-boot:run -q"
-}
-```
+| URL |
+|-----|
+| https://gateway-production-6556.up.railway.app |
 
 ## Cómo probar
 
-Una vez que todos los servicios estén levantados:
-
 | Página | URL |
 |--------|-----|
-| Frontend (menú principal) | http://localhost:8080 |
-| Usuarios | http://localhost:8080/# (click en Usuarios) |
-| Asistencia | http://localhost:8080/# (click en Asistencia) |
-| Suscripciones | http://localhost:8080/# (click en Suscripciones) |
-| Pagos | http://localhost:8080/# (click en Pagos) |
+| Landing Page | http://localhost:8080 |
+| Login | http://localhost:8080/login |
+| Registro | http://localhost:8080/registro |
+| Admin Panel | http://localhost:8080/admin |
+| Mi Cuenta | http://localhost:8080/mi-cuenta |
 
-### APIs directas (sin frontend)
-
-```bash
-# Listar usuarios
-curl http://localhost:8081/api/usuarios
-
-# Crear usuario
-curl -X POST http://localhost:8081/api/usuarios \
-  -H "Content-Type: application/json" \
-  -d '{"nombre":"Juan Pérez","email":"juan@email.com","telefono":"123456789"}'
-
-# Registrar asistencia (entrada)
-curl -X POST http://localhost:8082/api/asistencia/entrada/1
-
-# Ver suscripciones activas
-curl http://localhost:8083/api/suscripciones/usuario/1/activa
-
-# Registrar pago
-curl -X POST http://localhost:8084/api/pagos \
-  -H "Content-Type: application/json" \
-  -d '{"usuarioId":1,"monto":29990,"metodoPago":"tarjeta"}'
-```
-
-## Perfiles de Spring
-
-| Perfil | Base de datos | Uso |
-|--------|--------------|-----|
-| `default` | H2 en memoria | Desarrollo sin MySQL |
-| `dev` | MySQL local | Desarrollo con MySQL |
-| `prod` | MySQL (variables entorno) | Producción (Railway, Render) |
-
-Para usar un perfil específico:
+### Endpoints de API
 
 ```bash
-# Windows PowerShell
-$env:SPRING_PROFILES_ACTIVE="dev"; .\mvnw.cmd spring-boot:run
+# Login
+curl -X POST http://localhost:8080/api/usuarios/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"maria@correo.cl","password":"demo1234"}'
 
-# Linux/Mac
-SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
+# Listar planes
+curl http://localhost:8080/api/suscripciones/planes
+
+# Pago simulado (crea suscripción automáticamente)
+curl -X POST http://localhost:8080/api/pagos/pagar \
+  -H "Content-Type: application/json" \
+  -d '{"usuarioId":2,"planId":2,"metodoPago":"tarjeta"}'
+
+# Registrar asistencia
+curl -X POST http://localhost:8080/api/asistencia/entrada/2
+
+# Verificar suscripción activa
+curl http://localhost:8080/api/suscripciones/usuario/2/activa
 ```
 
 ## Estructura del proyecto
 
 ```
 GymWeb/
-├── docker-compose.yml
-├── .gitignore
-├── ms-gateway/              # Frontend + proxy (Spring MVC)
-│   └── src/main/resources/static/
-│       ├── index.html        # Página principal
-│       ├── css/style.css     # Estilos Bootstrap
-│       └── js/               # Lógica del frontend
-│           ├── api.js        # Cliente HTTP genérico
-│           ├── app.js        # Navegación SPA
-│           ├── usuarios.js   # CRUD usuarios
-│           ├── asistencia.js # Registro entrada/salida
-│           ├── suscripciones.js # Planes y suscripciones
-│           └── pagos.js      # Registro de pagos
-├── ms-usuarios/              # API REST de usuarios
-├── ms-asistencia/            # API REST de asistencia
-├── ms-suscripciones/         # API REST de suscripciones
-└── ms-pagos/                 # API REST de pagos
+├── ms-gateway/                    # Monolith - todo en uno
+│   ├── Dockerfile
+│   ├── pom.xml
+│   └── src/main/
+│       ├── java/com/gym/gateway/
+│       │   ├── GatewayApplication.java
+│       │   ├── model/             # Entidades JPA
+│       │   │   ├── Usuario.java
+│       │   │   ├── Plan.java
+│       │   │   ├── SuscripcionUsuario.java
+│       │   │   ├── Pago.java
+│       │   │   └── Asistencia.java
+│       │   ├── repository/        # Repositorios Spring Data
+│       │   ├── service/           # Lógica de negocio
+│       │   └── controller/        # Endpoints REST
+│       └── resources/
+│           ├── application.yml
+│           └── static/            # Frontend
+│               ├── index.html     # Landing page
+│               ├── login.html
+│               ├── registro.html
+│               ├── admin.html     # Panel administración
+│               ├── mi-cuenta.html # Portal miembro
+│               ├── css/style.css  # Tema oscuro glassmorphism
+│               └── js/
+│                   ├── admin.js
+│                   ├── micuenta.js
+│                   └── ui.js
+├── ms-suscripciones/              # Microservice (original)
+├── ms-pagos/                      # Microservice (original)
+├── ms-asistencia/                 # Microservice (original)
+└── ms-usuarios/                   # Microservice (original)
 ```
+
+## Stack Tecnológico
+
+- **Backend**: Spring Boot 4.0.6, Java 21, Spring Data JPA
+- **Base de datos**: H2 en memoria
+- **Frontend**: HTML5, CSS3 (glassmorphism), JavaScript vanilla
+- **Auth**: HttpSession con roles (DUENO/MIEMBRO/ADMIN)
+- **Password hashing**: SHA-256
+- **Deploy**: Railway (plan Free)
+- **Repo**: GitHub
