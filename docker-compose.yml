@@ -4,81 +4,27 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - URL_USUARIOS=http://ms-usuarios:8081
       - URL_ASISTENCIA=http://ms-asistencia:8082
       - URL_SUSCRIPCIONES=http://ms-suscripciones:8083
       - URL_PAGOS=http://ms-pagos:8084
     depends_on:
-      - ms-usuarios
       - ms-asistencia
       - ms-suscripciones
       - ms-pagos
-
-  ms-usuarios:
-    build: ./ms-usuarios
-    ports:
-      - "8081:8081"
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - MYSQL_URL=jdbc:mysql://db-gymweb:3306/db_usuarios
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-    depends_on:
-      db-gymweb:
-        condition: service_healthy
 
   ms-asistencia:
     build: ./ms-asistencia
     ports:
       - "8082:8082"
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - MYSQL_URL=jdbc:mysql://db-gymweb:3306/db_asistencia
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-    depends_on:
-      db-gymweb:
-        condition: service_healthy
 
   ms-suscripciones:
     build: ./ms-suscripciones
     ports:
       - "8083:8083"
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - MYSQL_URL=jdbc:mysql://db-gymweb:3306/db_suscripciones
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-    depends_on:
-      db-gymweb:
-        condition: service_healthy
 
   ms-pagos:
     build: ./ms-pagos
     ports:
       - "8084:8084"
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - MYSQL_URL=jdbc:mysql://db-gymweb:3306/db_pagos
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-    depends_on:
-      db-gymweb:
-        condition: service_healthy
-
-  db-gymweb:
-    image: mysql:8.4
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: db_gymweb
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    volumes:
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysql-gymweb-data:/var/lib/mysql
-
-volumes:
-  mysql-gymweb-data:
+      - URL_SUSCRIPCIONES=http://ms-suscripciones:8083
