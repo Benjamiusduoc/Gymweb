@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GymWeb — Gestión integral para tu gimnasio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="gw-topbar">
+    <a href="/" class="gw-brand">
+        <span class="logo"><i class="bi bi-lightning-charge-fill"></i></span>
+        <span>GymWeb</span>
+    </a>
+    <nav class="gw-nav">
+        <a href="#features">Funciones</a>
+        <a href="#planes">Planes</a>
+        <a href="#admin">Dueños</a>
+    </nav>
+    <div class="gw-user">
+        <a href="/login" class="gw-btn ghost sm"><i class="bi bi-box-arrow-in-right"></i> Iniciar sesión</a>
+        <a href="/registro" class="gw-btn primary sm"><i class="bi bi-person-plus"></i> Crear cuenta</a>
+    </div>
+</header>
+
+<main class="gw-container">
+    <section class="gw-hero">
+        <div>
+            <span class="gw-badge info" style="margin-bottom: 14px;">Sistema de gestión para gimnasios</span>
+            <h1>Entrena. <span class="grad">Administra. Crece.</span></h1>
+            <p class="lead">
+                Una plataforma moderna para dueños y miembros. Controla usuarios, planes, asistencia y
+                mensualidades desde un solo lugar — con un diseño pensado para que trabajar sea tan
+                motivador como entrenar.
+            </p>
+            <div class="cta">
+                <a href="/registro" class="gw-btn primary"><i class="bi bi-rocket-takeoff"></i> Empezar gratis</a>
+                <a href="/login" class="gw-btn"><i class="bi bi-shield-lock"></i> Soy dueño / administrador</a>
+            </div>
+        </div>
+        <div class="gw-hero-art">
+            <i class="bi bi-dribbble"></i>
+        </div>
+    </section>
+
+    <div class="gw-section-title" id="features">
+        <h2>Todo lo que tu gimnasio necesita</h2>
+        <p>Diseñado para que operes tu negocio sin fricciones.</p>
+    </div>
+
+    <div class="gw-grid gw-grid-3">
+        <div class="gw-card hover">
+            <div class="feature-icon"><i class="bi bi-people-fill"></i></div>
+            <h4>Gestión de usuarios</h4>
+            <p class="text-muted">CRUD completo de miembros. Activa, desactiva y mantén el control total de tu cartera de clientes.</p>
+        </div>
+        <div class="gw-card hover">
+            <div class="feature-icon"><i class="bi bi-calendar-check"></i></div>
+            <h4>Asistencia en vivo</h4>
+            <p class="text-muted">Registra entradas y salidas. Visualiza quién está entrenando ahora mismo en tu gimnasio.</p>
+        </div>
+        <div class="gw-card hover">
+            <div class="feature-icon"><i class="bi bi-stars"></i></div>
+            <h4>Planes y suscripciones</h4>
+            <p class="text-muted">Crea planes a la medida, asigna suscripciones y mantén el control de fechas de inicio y fin.</p>
+        </div>
+        <div class="gw-card hover">
+            <div class="feature-icon"><i class="bi bi-credit-card-2-front"></i></div>
+            <h4>Pagos automatizados</h4>
+            <p class="text-muted">Tus miembros pagan su mensualidad y el sistema actualiza automáticamente la base de datos.</p>
+        </div>
+        <div class="gw-card hover">
+            <div class="feature-icon"><i class="bi bi-bar-chart-line"></i></div>
+            <h4>Reportes claros</h4>
+            <p class="text-muted">Visualiza estadísticas clave: miembros activos, ingresos, vencimientos y más.</p>
+        </div>
+        <div class="gw-card hover">
+            <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+            <h4>Roles separados</h4>
+            <p class="text-muted">Panel de administración para dueños y portal personal para miembros. Cada quien ve lo que le corresponde.</p>
+        </div>
+    </div>
+
+    <div class="gw-section-title" id="planes">
+        <h2>Planes transparentes</h2>
+        <p>Cancela cuando quieras. Sin letra chica.</p>
+    </div>
+
+    <div class="gw-grid gw-grid-3">
+        <div class="plan-card">
+            <h4>Básico</h4>
+            <div class="price">$9.990 <small>/ mes</small></div>
+            <p class="text-muted">Acceso al gimnasio en horario normal.</p>
+            <ul>
+                <li><i class="bi bi-check2"></i> Acceso ilimitado</li>
+                <li><i class="bi bi-check2"></i> Vestidores</li>
+                <li><i class="bi bi-check2"></i> Asesoramiento general</li>
+            </ul>
+            <a href="/registro" class="gw-btn">Elegir Básico</a>
+        </div>
+        <div class="plan-card featured">
+            <h4>Premium <span class="gw-badge" style="margin-left:6px;">Recomendado</span></h4>
+            <div class="price">$19.990 <small>/ mes</small></div>
+            <p class="text-muted">Incluye clases grupales y nutrición.</p>
+            <ul>
+                <li><i class="bi bi-check2"></i> Todo del plan Básico</li>
+                <li><i class="bi bi-check2"></i> Clases grupales</li>
+                <li><i class="bi bi-check2"></i> Plan nutricional</li>
+                <li><i class="bi bi-check2"></i> Entrenador personal</li>
+            </ul>
+            <a href="/registro" class="gw-btn primary">Elegir Premium</a>
+        </div>
+        <div class="plan-card">
+            <h4>Elite</h4>
+            <div class="price">$29.990 <small>/ mes</small></div>
+            <p class="text-muted">Acceso total + beneficios VIP.</p>
+            <ul>
+                <li><i class="bi bi-check2"></i> Todo del plan Premium</li>
+                <li><i class="bi bi-check2"></i> Acceso 24/7</li>
+                <li><i class="bi bi-check2"></i> Sauna y zona spa</li>
+                <li><i class="bi bi-check2"></i> Invitados gratis</li>
+            </ul>
+            <a href="/registro" class="gw-btn">Elegir Elite</a>
+        </div>
+    </div>
+
+    <div class="gw-section-title" id="admin">
+        <h2>¿Eres dueño de un gimnasio?</h2>
+        <p>Accede al panel administrativo para gestionar tu negocio.</p>
+    </div>
+
+    <div class="gw-card" style="text-align:center; padding: 36px;">
+        <h3 class="mb-2">Panel de administración</h3>
+        <p class="text-muted">Ingresa con tu cuenta de administrador y toma el control de usuarios, planes, asistencia y pagos.</p>
+        <a href="/login" class="gw-btn primary mt-2"><i class="bi bi-shield-lock"></i> Acceder al panel</a>
+    </div>
+</main>
+
+<footer style="text-align:center; padding: 40px 20px; color: var(--text-muted); font-size: 0.85rem;">
+    © 2026 GymWeb — Hecho con <i class="bi bi-heart-fill" style="color: var(--primary);"></i> para tu gimnasio.
+</footer>
+
+<div class="gw-toast-stack" id="toastStack"></div>
+
+<script src="/js/ui.js"></script>
+</body>
+</html>

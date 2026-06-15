@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi cuenta — GymWeb</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="gw-topbar">
+    <a href="/mi-cuenta" class="gw-brand">
+        <span class="logo"><i class="bi bi-lightning-charge-fill"></i></span>
+        <span>GymWeb <span class="gw-badge success" style="font-size:0.7rem; vertical-align:middle;">Miembro</span></span>
+    </a>
+    <nav class="gw-nav">
+        <a href="#" class="active" data-tab="perfil"><i class="bi bi-person"></i> Mi perfil</a>
+        <a href="#" data-tab="suscripcion"><i class="bi bi-card-list"></i> Mi suscripción</a>
+        <a href="#" data-tab="pagar"><i class="bi bi-credit-card"></i> Pagar</a>
+    </nav>
+    <div class="gw-user">
+        <span class="pill"><i class="bi bi-person-circle"></i> <span id="userName">...</span></span>
+        <a href="#" class="gw-btn sm" onclick="handleLogout()"><i class="bi bi-box-arrow-right"></i> Salir</a>
+    </div>
+</header>
+
+<div class="gw-container">
+    <!-- Perfil -->
+    <div id="tab-perfil" class="member-tab">
+        <div class="gw-page-title">
+            <div><h2>Mi perfil</h2><p class="text-muted fs-sm">Información de tu cuenta</p></div>
+        </div>
+        <div class="gw-card" style="max-width:640px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div><span class="text-muted fs-sm">Nombre</span><div id="miNombre" class="fs-lg fw-700">...</div></div>
+                <div><span class="text-muted fs-sm">Apellido</span><div id="miApellido" class="fs-lg fw-700">...</div></div>
+            </div>
+            <div class="divider"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div><span class="text-muted fs-sm">Email</span><div id="miEmail" class="fs-lg fw-700">...</div></div>
+                <div><span class="text-muted fs-sm">RUT</span><div id="miRut" class="fs-lg fw-700">...</div></div>
+            </div>
+            <div class="divider"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div><span class="text-muted fs-sm">Teléfono</span><div id="miTelefono" class="fs-lg fw-700">...</div></div>
+                <div><span class="text-muted fs-sm">Dirección</span><div id="miDireccion" class="fs-lg fw-700">...</div></div>
+            </div>
+            <div class="divider"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div><span class="text-muted fs-sm">Estado</span><div><span class="gw-badge success" id="miEstado">...</span></div></div>
+                <div><span class="text-muted fs-sm">Miembro desde</span><div id="miRegistro" class="fs-lg fw-700">...</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mi suscripción -->
+    <div id="tab-suscripcion" class="member-tab" style="display:none;">
+        <div class="gw-page-title">
+            <div><h2>Mi suscripción</h2><p class="text-muted fs-sm">Estado actual de tu membresía</p></div>
+        </div>
+
+        <div id="noSubCard" class="gw-card" style="text-align:center; padding:40px; display:none;">
+            <i class="bi bi-calendar-x" style="font-size:3rem; color:var(--text-muted);"></i>
+            <h3 style="margin:14px 0 8px;">Sin suscripción activa</h3>
+            <p class="text-muted">No tienes una suscripción activa. ¡Elige un plan y empieza a entrenar!</p>
+            <button class="gw-btn primary mt-2" onclick="switchTab('pagar')"><i class="bi bi-credit-card"></i> Ver planes</button>
+        </div>
+
+        <div id="subCard" class="gw-card" style="max-width:560px; display:none;">
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+                <div style="width:50px; height:50px; border-radius:12px; background:linear-gradient(135deg, rgba(255,90,31,0.3), rgba(110,231,183,0.3)); display:grid; place-items:center;">
+                    <i class="bi bi-star-fill" style="color:var(--primary-2); font-size:1.4rem;"></i>
+                </div>
+                <div>
+                    <div class="fs-lg fw-700" id="subPlanName">...</div>
+                    <div class="text-muted fs-sm" id="subPlanDesc">...</div>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div><span class="text-muted fs-sm">Estado</span><div><span class="gw-badge" id="subEstado">...</span></div></div>
+                <div><span class="text-muted fs-sm">Precio</span><div class="fs-lg fw-700" id="subPrecio">...</div></div>
+            </div>
+            <div class="divider"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div><span class="text-muted fs-sm">Inicio</span><div class="fs-lg fw-700" id="subInicio">...</div></div>
+                <div><span class="text-muted fs-sm">Fin</span><div class="fs-lg fw-700" id="subFin">...</div></div>
+            </div>
+        </div>
+
+        <div id="subHistory" style="margin-top:24px; display:none;">
+            <h4 style="margin-bottom:12px;">Historial de suscripciones</h4>
+            <div class="gw-table-wrap scroll">
+                <table class="gw-table"><thead><tr><th>Plan</th><th>Inicio</th><th>Fin</th><th>Estado</th></tr></thead><tbody id="subHistoryBody"></tbody></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagar -->
+    <div id="tab-pagar" class="member-tab" style="display:none;">
+        <div class="gw-page-title">
+            <div><h2>Pagar mensualidad</h2><p class="text-muted fs-sm">Elige tu plan y realiza el pago</p></div>
+        </div>
+
+        <div class="gw-grid gw-grid-3" id="plansGrid">
+            <div style="text-align:center; padding:40px; grid-column:1/-1;">
+                <i class="bi bi-arrow-repeat" style="font-size:2rem; animation:spin 1s linear infinite;"></i>
+                <p class="text-muted mt-2">Cargando planes...</p>
+            </div>
+        </div>
+
+        <div id="paymentResult" style="display:none; margin-top:24px;">
+            <div class="gw-card" style="border-color: var(--success); text-align:center; padding:32px;">
+                <i class="bi bi-check-circle-fill" style="font-size:3rem; color:var(--success);"></i>
+                <h3 style="margin:14px 0 8px;">¡Pago registrado!</h3>
+                <p class="text-muted" id="paymentResultMsg">Tu suscripción ha sido activada correctamente.</p>
+                <button class="gw-btn primary mt-2" onclick="switchTab('suscripcion')"><i class="bi bi-card-list"></i> Ver mi suscripción</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Confirmar pago -->
+<div class="gw-modal-backdrop" id="payModal">
+    <div class="gw-modal">
+        <div class="gw-modal-head"><h3>Confirmar pago</h3><button class="gw-close" onclick="closeModal('payModal')"><i class="bi bi-x-lg"></i></button></div>
+        <div class="gw-modal-body">
+            <div style="text-align:center; margin-bottom:18px;">
+                <div class="text-muted fs-sm">Plan seleccionado</div>
+                <div class="fw-700 fs-lg" id="payPlanName">...</div>
+                <div class="fw-700" style="font-size:1.8rem; color:var(--primary-2);" id="payPlanPrice">...</div>
+            </div>
+            <div class="gw-field">
+                <label>Método de pago</label>
+                <select class="gw-select" id="payMetodo">
+                    <option value="tarjeta">Tarjeta de crédito/débito</option>
+                    <option value="transferencia">Transferencia bancaria</option>
+                    <option value="efectivo">Efectivo</option>
+                </select>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:12px; font-size:0.85rem; color:var(--text-muted); text-align:center;">
+                <i class="bi bi-info-circle"></i> Este es un pago simulado. No se realizará ningún cobro real.
+            </div>
+        </div>
+        <div class="gw-modal-foot">
+            <button class="gw-btn ghost" onclick="closeModal('payModal')">Cancelar</button>
+            <button class="gw-btn primary" onclick="confirmPay()" id="confirmPayBtn"><i class="bi bi-lock"></i> Confirmar pago</button>
+        </div>
+    </div>
+</div>
+
+<div class="gw-toast-stack" id="toastStack"></div>
+
+<script src="/js/ui.js"></script>
+<script src="/js/micuenta.js"></script>
+</body>
+</html>

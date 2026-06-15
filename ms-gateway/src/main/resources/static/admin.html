@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — GymWeb</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="gw-topbar">
+    <a href="/admin" class="gw-brand">
+        <span class="logo"><i class="bi bi-lightning-charge-fill"></i></span>
+        <span>GymWeb <span class="gw-badge danger" style="font-size:0.7rem; vertical-align:middle;">Admin</span></span>
+    </a>
+    <nav class="gw-nav">
+        <a href="#" class="active" data-tab="dashboard"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+        <a href="#" data-tab="usuarios"><i class="bi bi-people"></i> Usuarios</a>
+        <a href="#" data-tab="suscripciones"><i class="bi bi-card-list"></i> Suscripciones</a>
+        <a href="#" data-tab="asistencia"><i class="bi bi-calendar-check"></i> Asistencia</a>
+        <a href="#" data-tab="pagos"><i class="bi bi-credit-card"></i> Pagos</a>
+    </nav>
+    <div class="gw-user">
+        <span class="pill"><i class="bi bi-person-circle"></i> <span id="userName">...</span></span>
+        <a href="#" class="gw-btn sm" onclick="handleLogout()"><i class="bi bi-box-arrow-right"></i> Salir</a>
+    </div>
+</header>
+
+<div class="gw-container">
+    <!-- Dashboard -->
+    <div id="tab-dashboard" class="admin-tab">
+        <div class="gw-page-title"><h2>Dashboard</h2></div>
+        <div class="gw-grid gw-grid-4" id="statsGrid">
+            <div class="stat-card"><div class="icon"><i class="bi bi-people-fill"></i></div><div><div class="value" id="statUsers">-</div><div class="label">Miembros</div></div></div>
+            <div class="stat-card"><div class="icon" style="background:rgba(34,197,94,0.15); color:#86efac;"><i class="bi bi-person-check"></i></div><div><div class="value" id="statActive">-</div><div class="label">Activos</div></div></div>
+            <div class="stat-card"><div class="icon" style="background:rgba(245,158,11,0.15); color:#fcd34d;"><i class="bi bi-card-list"></i></div><div><div class="value" id="statSubs">-</div><div class="label">Suscripciones</div></div></div>
+            <div class="stat-card"><div class="icon" style="background:rgba(56,189,248,0.15); color:#7dd3fc;"><i class="bi bi-cash-stack"></i></div><div><div class="value" id="statRevenue">-</div><div class="label">Ingresos</div></div></div>
+        </div>
+
+        <div class="gw-grid gw-grid-2" style="margin-top:22px;">
+            <div class="gw-card">
+                <h4 style="margin:0 0 14px;">Últimos usuarios</h4>
+                <div class="gw-table-wrap"><table class="gw-table"><thead><tr><th>Nombre</th><th>Email</th><th>Rol</th><th>Estado</th></tr></thead><tbody id="recentUsers"></tbody></table></div>
+            </div>
+            <div class="gw-card">
+                <h4 style="margin:0 0 14px;">Últimos pagos</h4>
+                <div class="gw-table-wrap"><table class="gw-table"><thead><tr><th>Usuario</th><th>Monto</th><th>Método</th><th>Fecha</th></tr></thead><tbody id="recentPayments"></tbody></table></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Usuarios -->
+    <div id="tab-usuarios" class="admin-tab" style="display:none;">
+        <div class="gw-page-title">
+            <div><h2>Usuarios</h2><p class="text-muted fs-sm">Administra los miembros del gimnasio</p></div>
+            <button class="gw-btn primary" onclick="openUserModal()"><i class="bi bi-plus-lg"></i> Nuevo usuario</button>
+        </div>
+        <div class="gw-table-wrap scroll">
+            <table class="gw-table">
+                <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>RUT</th><th>Teléfono</th><th>Rol</th><th>Estado</th><th>Registro</th><th>Acciones</th></tr></thead>
+                <tbody id="usersBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Suscripciones -->
+    <div id="tab-suscripciones" class="admin-tab" style="display:none;">
+        <div class="gw-page-title">
+            <div><h2>Suscripciones</h2><p class="text-muted fs-sm">Planes y suscripciones de miembros</p></div>
+        </div>
+        <h4 style="margin-bottom:12px;"><i class="bi bi-stars"></i> Planes</h4>
+        <div class="d-flex" style="justify-content:flex-end; margin-bottom:10px;">
+            <button class="gw-btn sm primary" onclick="openPlanModal()"><i class="bi bi-plus-lg"></i> Nuevo Plan</button>
+        </div>
+        <div class="gw-table-wrap scroll" style="margin-bottom:24px;">
+            <table class="gw-table"><thead><tr><th>ID</th><th>Nombre</th><th>Precio</th><th>Duración</th><th>Descripción</th></tr></thead><tbody id="plansBody"></tbody></table>
+        </div>
+
+        <h4 style="margin-bottom:12px;"><i class="bi bi-person-check"></i> Suscripciones activas</h4>
+        <div class="d-flex" style="justify-content:flex-end; margin-bottom:10px;">
+            <button class="gw-btn sm primary" onclick="openAssignModal()"><i class="bi bi-plus-lg"></i> Asignar</button>
+        </div>
+        <div class="gw-table-wrap scroll">
+            <table class="gw-table"><thead><tr><th>ID</th><th>Usuario</th><th>Plan</th><th>Inicio</th><th>Fin</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="subsBody"></tbody></table>
+        </div>
+    </div>
+
+    <!-- Asistencia -->
+    <div id="tab-asistencia" class="admin-tab" style="display:none;">
+        <div class="gw-page-title"><h2>Asistencia</h2><p class="text-muted fs-sm">Registrar entrada y salida de miembros</p></div>
+        <div class="gw-grid gw-grid-2" style="margin-bottom:22px;">
+            <div class="gw-card" style="display:flex; align-items:center; gap:12px;">
+                <input type="number" class="gw-input" id="entradaUserId" placeholder="ID Usuario" min="1" style="flex:1;">
+                <button class="gw-btn success" onclick="regEntrada()"><i class="bi bi-box-arrow-in-right"></i> Entrada</button>
+            </div>
+            <div class="gw-card" style="display:flex; align-items:center; gap:12px;">
+                <input type="number" class="gw-input" id="salidaUserId" placeholder="ID Usuario" min="1" style="flex:1;">
+                <button class="gw-btn" style="background:rgba(245,158,11,0.15); color:#fcd34d; border-color:rgba(245,158,11,0.3);" onclick="regSalida()"><i class="bi bi-box-arrow-right"></i> Salida</button>
+            </div>
+        </div>
+        <div class="gw-table-wrap scroll">
+            <table class="gw-table"><thead><tr><th>ID</th><th>Usuario</th><th>Fecha</th><th>Entrada</th><th>Salida</th><th>Estado</th></tr></thead><tbody id="asistenciaBody"></tbody></table>
+        </div>
+    </div>
+
+    <!-- Pagos -->
+    <div id="tab-pagos" class="admin-tab" style="display:none;">
+        <div class="gw-page-title">
+            <div><h2>Pagos</h2><p class="text-muted fs-sm">Registro de pagos de mensualidades</p></div>
+        </div>
+        <div class="gw-table-wrap scroll">
+            <table class="gw-table"><thead><tr><th>ID</th><th>Usuario</th><th>Monto</th><th>Fecha</th><th>Método</th><th>Estado</th></tr></thead><tbody id="pagosBody"></tbody></table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Nuevo/Editar Usuario -->
+<div class="gw-modal-backdrop" id="userModal">
+    <div class="gw-modal">
+        <div class="gw-modal-head"><h3 id="userModalTitle">Nuevo Usuario</h3><button class="gw-close" onclick="closeModal('userModal')"><i class="bi bi-x-lg"></i></button></div>
+        <div class="gw-modal-body">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="gw-field"><label>Nombre *</label><input type="text" class="gw-input" id="uNombre" required></div>
+                <div class="gw-field"><label>Apellido *</label><input type="text" class="gw-input" id="uApellido" required></div>
+            </div>
+            <div class="gw-field"><label>Email *</label><input type="email" class="gw-input" id="uEmail" required></div>
+            <div class="gw-field"><label>Contraseña <span id="pwdHint">(mínimo 4)</span></label><input type="password" class="gw-input" id="uPassword" minlength="4"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="gw-field"><label>RUT</label><input type="text" class="gw-input" id="uRut"></div>
+                <div class="gw-field"><label>Teléfono</label><input type="text" class="gw-input" id="uTelefono"></div>
+            </div>
+            <div class="gw-field"><label>Dirección</label><input type="text" class="gw-input" id="uDireccion"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="gw-field"><label>Rol</label><select class="gw-select" id="uRol"><option value="MIEMBRO">Miembro</option><option value="DUENO">Dueño</option><option value="ADMIN">Admin</option></select></div>
+                <div class="gw-field"><label>Estado</label><select class="gw-select" id="uEstado"><option value="activo">Activo</option><option value="inactivo">Inactivo</option></select></div>
+            </div>
+        </div>
+        <div class="gw-modal-foot">
+            <button class="gw-btn ghost" onclick="closeModal('userModal')">Cancelar</button>
+            <button class="gw-btn primary" onclick="saveUser()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Nuevo Plan -->
+<div class="gw-modal-backdrop" id="planModal">
+    <div class="gw-modal">
+        <div class="gw-modal-head"><h3>Nuevo Plan</h3><button class="gw-close" onclick="closeModal('planModal')"><i class="bi bi-x-lg"></i></button></div>
+        <div class="gw-modal-body">
+            <div class="gw-field"><label>Nombre *</label><input type="text" class="gw-input" id="pNombre" required></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="gw-field"><label>Precio ($) *</label><input type="number" step="0.01" class="gw-input" id="pPrecio" required></div>
+                <div class="gw-field"><label>Duración (días) *</label><input type="number" class="gw-input" id="pDuracion" required></div>
+            </div>
+            <div class="gw-field"><label>Descripción</label><input type="text" class="gw-input" id="pDescripcion"></div>
+        </div>
+        <div class="gw-modal-foot">
+            <button class="gw-btn ghost" onclick="closeModal('planModal')">Cancelar</button>
+            <button class="gw-btn primary" onclick="savePlan()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Asignar Suscripción -->
+<div class="gw-modal-backdrop" id="assignModal">
+    <div class="gw-modal">
+        <div class="gw-modal-head"><h3>Asignar Suscripción</h3><button class="gw-close" onclick="closeModal('assignModal')"><i class="bi bi-x-lg"></i></button></div>
+        <div class="gw-modal-body">
+            <div class="gw-field"><label>ID Usuario *</label><input type="number" class="gw-input" id="asignarUserId" min="1" required></div>
+            <div class="gw-field"><label>Plan *</label><select class="gw-select" id="asignarPlanId"></select></div>
+        </div>
+        <div class="gw-modal-foot">
+            <button class="gw-btn ghost" onclick="closeModal('assignModal')">Cancelar</button>
+            <button class="gw-btn primary" onclick="saveAssign()">Asignar</button>
+        </div>
+    </div>
+</div>
+
+<div class="gw-toast-stack" id="toastStack"></div>
+
+<script src="/js/ui.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+target/
+*.class
+*.jar
+*.war
+.idea/
+*.iml
+.settings/
+.project
+.classpath
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
+.mvn/wrapper/maven-wrapper.jar
+mysql-gymweb-data/
